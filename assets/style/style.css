@@ -316,7 +316,7 @@ body {
 
 .slider__display_review {
     min-height: 380px;
-    max-width: 500px;
+    width: 100%;
     padding: 25px 15px;
     display: flex;
     flex-direction: column;
