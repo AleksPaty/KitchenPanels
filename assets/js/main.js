@@ -35,12 +35,27 @@ btnBurger.addEventListener('click', handleBurgerBtn);
 
 const slideDisplay = document.getElementById('slider-display');
 const slideLine = document.getElementById('slider-line');
-const card = document.querySelectorAll('.slider__display_review');
 const btnSliderLeft = document.getElementById('btn-slider-left');
 const btnSliderRight = document.getElementById('btn-slider-right');
 const countReviews = slideLine.childElementCount;
 const gapInSlideLine = 20;
 let currentCount = 0;
+
+const checkOpportunityMoveSlide = (side, slideWidth) => {        // check moving slide or not
+    let canMove = true;
+    switch (side) {
+        case 'left':
+            if(slideWidth > 500 && currentCount === countReviews / 2) canMove = false;
+            if(slideWidth <= 500 && currentCount === countReviews - 1) canMove = false;
+            break;
+        case 'right':
+            if (currentCount === 0) canMove = false;
+            break;
+        default:
+            break;
+    }
+    return canMove;
+};
 
 const movingSlide = (direction, slideWidth) => {
     if(direction !== 'left' && direction !== 'right') return;
@@ -67,13 +82,34 @@ window.addEventListener('resize', () => {
 
 btnSliderLeft.addEventListener('click', () => {
     const slideWindowWidth = slideDisplay.offsetWidth;
-    if(slideWindowWidth > 500 && currentCount === countReviews / 2) return;
-    if(slideWindowWidth <= 500 && currentCount === countReviews - 1) return;
-    movingSlide('left', slideWindowWidth)
+    if(!checkOpportunityMoveSlide('left', slideWindowWidth)) return;
+
+    movingSlide('left', slideWindowWidth);
 })
 
 btnSliderRight.addEventListener('click', () => {
     const slideWindowWidth = slideDisplay.offsetWidth;
-    if (currentCount === 0) return;
+    if (checkOpportunityMoveSlide('right', slideWindowWidth)) return;
+
     movingSlide('right', slideWindowWidth);
+})
+
+slideDisplay.addEventListener('touchstart', (e) => {
+    if(document.body.clientWidth > 768) return;
+
+    const startPoint = e.touches[0].clientX;
+    const touchMoving = function(touchPoint) {
+        const touchEnd = (e) => {
+            const startPoint = touchPoint;
+            const endPoint = e.changedTouches[0].clientX;
+            const slideWindowWidth = slideDisplay.offsetWidth;
+            const side = startPoint - endPoint > 0 ? 'left' : 'right';
+
+            if(checkOpportunityMoveSlide(side, slideWindowWidth)) movingSlide(side, slideWindowWidth);
+            slideDisplay.removeEventListener('touchend', touchEnd);
+        }
+        return touchEnd;
+    }
+
+    slideDisplay.addEventListener('touchend', touchMoving(startPoint))
 })
