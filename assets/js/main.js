@@ -66,7 +66,6 @@ const movingSlide = (direction, slideWidth) => {
         : currentCount -= 1;
 
     slideLine.style.transform = `translateX(-${ distance * currentCount }px)`;
-    console.log(distance * currentCount);
 }
 
 window.addEventListener('resize', () => {
@@ -89,7 +88,7 @@ btnSliderLeft.addEventListener('click', () => {
 
 btnSliderRight.addEventListener('click', () => {
     const slideWindowWidth = slideDisplay.offsetWidth;
-    if (checkOpportunityMoveSlide('right', slideWindowWidth)) return;
+    if (!checkOpportunityMoveSlide('right', slideWindowWidth)) return;
 
     movingSlide('right', slideWindowWidth);
 })
