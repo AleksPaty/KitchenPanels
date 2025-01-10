@@ -81,16 +81,16 @@ window.addEventListener('resize', () => {
 
 btnSliderLeft.addEventListener('click', () => {
     const slideWindowWidth = slideDisplay.offsetWidth;
-    if(!checkOpportunityMoveSlide('left', slideWindowWidth)) return;
+    if(!checkOpportunityMoveSlide('right', slideWindowWidth)) return;
 
-    movingSlide('left', slideWindowWidth);
+    movingSlide('right', slideWindowWidth);
 })
 
 btnSliderRight.addEventListener('click', () => {
     const slideWindowWidth = slideDisplay.offsetWidth;
-    if (!checkOpportunityMoveSlide('right', slideWindowWidth)) return;
+    if (!checkOpportunityMoveSlide('left', slideWindowWidth)) return;
 
-    movingSlide('right', slideWindowWidth);
+    movingSlide('left', slideWindowWidth);
 })
 
 slideDisplay.addEventListener('touchstart', (e) => {
